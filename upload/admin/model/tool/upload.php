@@ -1,5 +1,13 @@
 <?php
 class ModelToolUpload extends Model {
+	public function addUpload($name, $filename) {
+		$code = sha1(uniqid(mt_rand(), true));
+
+		$this->db->query("INSERT INTO `" . DB_PREFIX . "upload` SET `name` = '" . $this->db->escape($name) . "', `filename` = '" . $this->db->escape($filename) . "', `code` = '" . $this->db->escape($code) . "', `date_added` = NOW()");
+
+		return $code;
+	}
+		
 	public function deleteUpload($upload_id) {
 		$this->db->query("DELETE FROM " . DB_PREFIX . "upload WHERE upload_id = '" . (int)$upload_id . "'");
 	}
@@ -22,15 +30,15 @@ class ModelToolUpload extends Model {
 		$implode = array();
 
 		if (!empty($data['filter_name'])) {
-			$implode[] = "name LIKE '" . $this->db->escape($data['filter_name']) . "%'";
+			$implode[] = "name LIKE '" . $this->db->escape((string)$data['filter_name']) . "%'";
 		}
 
 		if (!empty($data['filter_filename'])) {
-			$implode[] = "filename LIKE '" . $this->db->escape($data['filter_filename']) . "%'";
+			$implode[] = "filename LIKE '" . $this->db->escape((string)$data['filter_filename']) . "%'";
 		}
 
 		if (!empty($data['filter_date_added'])) {
-			$implode[] = "date_added = '" . $this->db->escape($data['filter_date_added']) . "%'";
+			$implode[] = "date_added = '" . $this->db->escape((string)$data['filter_date_added']) . "%'";
 		}
 
 		if ($implode) {
@@ -72,21 +80,21 @@ class ModelToolUpload extends Model {
 		return $query->rows;
 	}
 
-	public function getTotalUploads() {
+	public function getTotalUploads($data = array()) {
 		$sql = "SELECT COUNT(*) AS total FROM " . DB_PREFIX . "upload";
 
 		$implode = array();
 
 		if (!empty($data['filter_name'])) {
-			$implode[] = "name LIKE '" . $this->db->escape($data['filter_name']) . "%'";
+			$implode[] = "name LIKE '" . $this->db->escape((string)$data['filter_name']) . "%'";
 		}
 
 		if (!empty($data['filter_filename'])) {
-			$implode[] = "filename LIKE '" . $this->db->escape($data['filter_filename']) . "%'";
+			$implode[] = "filename LIKE '" . $this->db->escape((string)$data['filter_filename']) . "%'";
 		}
 
 		if (!empty($data['filter_date_added'])) {
-			$implode[] = "date_added = '" . $this->db->escape($data['filter_date_added']) . "'";
+			$implode[] = "date_added = '" . $this->db->escape((string)$data['filter_date_added']) . "'";
 		}
 
 		if ($implode) {

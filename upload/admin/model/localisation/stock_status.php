@@ -12,6 +12,8 @@ class ModelLocalisationStockStatus extends Model {
 		}
 
 		$this->cache->delete('stock_status');
+		
+		return $stock_status_id;
 	}
 
 	public function editStockStatus($stock_status_id, $data) {
@@ -78,7 +80,7 @@ class ModelLocalisationStockStatus extends Model {
 		}
 	}
 
-	public function getStockStatusDescriptions($stock_status_id) {
+	public function getDescriptions($stock_status_id) {
 		$stock_status_data = array();
 
 		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "stock_status WHERE stock_status_id = '" . (int)$stock_status_id . "'");
@@ -91,7 +93,7 @@ class ModelLocalisationStockStatus extends Model {
 	}
 
 	public function getTotalStockStatuses() {
-      	$query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "stock_status WHERE language_id = '" . (int)$this->config->get('config_language_id') . "'");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "stock_status WHERE language_id = '" . (int)$this->config->get('config_language_id') . "'");
 
 		return $query->row['total'];
 	}

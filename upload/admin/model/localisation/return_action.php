@@ -12,6 +12,8 @@ class ModelLocalisationReturnAction extends Model {
 		}
 
 		$this->cache->delete('return_action');
+		
+		return $return_action_id;
 	}
 
 	public function editReturnAction($return_action_id, $data) {
@@ -37,7 +39,7 @@ class ModelLocalisationReturnAction extends Model {
 	}
 
 	public function getReturnActions($data = array()) {
-      	if ($data) {
+		if ($data) {
 			$sql = "SELECT * FROM " . DB_PREFIX . "return_action WHERE language_id = '" . (int)$this->config->get('config_language_id') . "'";
 
 			$sql .= " ORDER BY name";
@@ -78,7 +80,7 @@ class ModelLocalisationReturnAction extends Model {
 		}
 	}
 
-	public function getReturnActionDescriptions($return_action_id) {
+	public function getDescriptions($return_action_id) {
 		$return_action_data = array();
 
 		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "return_action WHERE return_action_id = '" . (int)$return_action_id . "'");
@@ -91,7 +93,7 @@ class ModelLocalisationReturnAction extends Model {
 	}
 
 	public function getTotalReturnActions() {
-      	$query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "return_action WHERE language_id = '" . (int)$this->config->get('config_language_id') . "'");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "return_action WHERE language_id = '" . (int)$this->config->get('config_language_id') . "'");
 
 		return $query->row['total'];
 	}

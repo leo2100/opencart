@@ -1,7 +1,7 @@
 <?php
 class ModelLocalisationTaxRate extends Model {
 	public function addTaxRate($data) {
-		$this->db->query("INSERT INTO " . DB_PREFIX . "tax_rate SET name = '" . $this->db->escape($data['name']) . "', rate = '" . (float)$data['rate'] . "', `type` = '" . $this->db->escape($data['type']) . "', geo_zone_id = '" . (int)$data['geo_zone_id'] . "', date_added = NOW(), date_modified = NOW()");
+		$this->db->query("INSERT INTO " . DB_PREFIX . "tax_rate SET name = '" . $this->db->escape((string)$data['name']) . "', rate = '" . (float)$data['rate'] . "', `type` = '" . $this->db->escape((string)$data['type']) . "', geo_zone_id = '" . (int)$data['geo_zone_id'] . "', date_added = NOW(), date_modified = NOW()");
 
 		$tax_rate_id = $this->db->getLastId();
 
@@ -10,10 +10,12 @@ class ModelLocalisationTaxRate extends Model {
 				$this->db->query("INSERT INTO " . DB_PREFIX . "tax_rate_to_customer_group SET tax_rate_id = '" . (int)$tax_rate_id . "', customer_group_id = '" . (int)$customer_group_id . "'");
 			}
 		}
+		
+		return $tax_rate_id;
 	}
 
 	public function editTaxRate($tax_rate_id, $data) {
-		$this->db->query("UPDATE " . DB_PREFIX . "tax_rate SET name = '" . $this->db->escape($data['name']) . "', rate = '" . (float)$data['rate'] . "', `type` = '" . $this->db->escape($data['type']) . "', geo_zone_id = '" . (int)$data['geo_zone_id'] . "', date_modified = NOW() WHERE tax_rate_id = '" . (int)$tax_rate_id . "'");
+		$this->db->query("UPDATE " . DB_PREFIX . "tax_rate SET name = '" . $this->db->escape((string)$data['name']) . "', rate = '" . (float)$data['rate'] . "', `type` = '" . $this->db->escape((string)$data['type']) . "', geo_zone_id = '" . (int)$data['geo_zone_id'] . "', date_modified = NOW() WHERE tax_rate_id = '" . (int)$tax_rate_id . "'");
 
 		$this->db->query("DELETE FROM " . DB_PREFIX . "tax_rate_to_customer_group WHERE tax_rate_id = '" . (int)$tax_rate_id . "'");
 
@@ -76,7 +78,7 @@ class ModelLocalisationTaxRate extends Model {
 		return $query->rows;
 	}
 
-	public function getTaxRateCustomerGroups($tax_rate_id) {
+	public function getCustomerGroups($tax_rate_id) {
 		$tax_customer_group_data = array();
 
 		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "tax_rate_to_customer_group WHERE tax_rate_id = '" . (int)$tax_rate_id . "'");
@@ -89,13 +91,13 @@ class ModelLocalisationTaxRate extends Model {
 	}
 
 	public function getTotalTaxRates() {
-      	$query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "tax_rate");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "tax_rate");
 
 		return $query->row['total'];
 	}
 
 	public function getTotalTaxRatesByGeoZoneId($geo_zone_id) {
-      	$query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "tax_rate WHERE geo_zone_id = '" . (int)$geo_zone_id . "'");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "tax_rate WHERE geo_zone_id = '" . (int)$geo_zone_id . "'");
 
 		return $query->row['total'];
 	}
